@@ -3,38 +3,31 @@
 #include "binary_trees.h"
 
 /**
- * binary_tree_is_bst - Checks if a binary tree is a valid Binary Search Tree (BST)
- * @tree: Pointer to the root node of the tree to check
- *
- * This function checks whether the given binary tree is a valid Binary Search Tree (BST)
- * according to the properties of a BST. It recursively checks each node and its children.
- *
- * Return: 1 if the tree is a valid BST, 0 otherwise
+ * binary_tree_is_bst_recursive - Helper function
+ * @tree: Pointer to the root node
+ * @min: Pointer to the minimum
+ * @max: Pointer to the maximum
+ * Return: 1 if the tree is a BST
  */
-int binary_tree_is_bst(const binary_tree_t *tree)
+
+int binary_tree_is_bst_recursive(const binary_tree_t *tree,
+		const int *min, const int *max)
 {
-    return binary_tree_is_bst_recursive(tree, NULL, NULL);
+	if (tree == NULL)
+		return (1);
+	if ((min && tree->n <= *min) || (max && tree->n >= *max))
+		return (0);
+	return (binary_tree_is_bst_recursive(tree->left, min, &tree->n) &&
+			binary_tree_is_bst_recursive(tree->right, &tree->n, max));
 }
 
 /**
- * binary_tree_is_bst_recursive - Helper function for binary_tree_is_bst
- * @tree: Pointer to the root node of the tree to check
- * @min: Pointer to the minimum value constraint
- * @max: Pointer to the maximum value constraint
- *
- * This function recursively checks whether the given binary tree is a valid Binary Search Tree (BST)
- * within the specified value constraints.
- *
- * Return: 1 if the tree is a valid BST, 0 otherwise
+ * binary_tree_is_bst - Checks binary tree validity
+ * @tree: Pointer to the root node
+ * Return: 1 if the tree is a valid
  */
-int binary_tree_is_bst_recursive(const binary_tree_t *tree, const int *min, const int *max)
+
+int binary_tree_is_bst(const binary_tree_t *tree)
 {
-    if (tree == NULL)
-        return 1;
-
-    if ((min && tree->n <= *min) || (max && tree->n >= *max))
-        return 0;
-
-    return (binary_tree_is_bst_recursive(tree->left, min, &tree->n) &&
-            binary_tree_is_bst_recursive(tree->right, &tree->n, max));
+	return (binary_tree_is_bst_recursive(tree, NULL, NULL));
 }
